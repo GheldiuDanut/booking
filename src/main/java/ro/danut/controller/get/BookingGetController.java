@@ -28,14 +28,41 @@ public class BookingGetController {
 
     @GetMapping("/locations/{attraction}")
     public List<Location> getAllLocationsForAnTouristAttraction(@PathVariable String attraction){
-        return bookingService.getAllLocations().stream().filter(location -> location.getTouristAttraction().contains(attraction)).toList();
+        return bookingService.getAllLocations().stream().
+                filter(location -> location.getTouristAttraction()
+                        .contains(attraction)).toList();
 //        return bookingService.getAllLocationsByTouristAttraction();
     }
 
-    @GetMapping("/location/{price}")
-    public List<Location>getAllLocationForAnCertainPrice(@PathVariable int price){
-        return  bookingService.getAllLocations().stream()
-                .filter(location -> location.getPrice() == price)
+    @GetMapping("/location/{minPrice}/{maxPrice}")
+    public List<Location>getAllLocationForAnCertainPrice(@PathVariable int minPrice, @PathVariable int maxPrice) {
+        return bookingService.getAllLocations().stream()
+                .filter(location -> location.getPrice() >= minPrice && location.getPrice() <= maxPrice)
                 .collect(Collectors.toList());
     }
+    @GetMapping("/location/{attraction}/availability/{availability}")
+    public List<Location>getAllLocationsForAnTouristAttractionAndAvailability(
+            @PathVariable String attraction,
+            @PathVariable boolean availability){
+        return bookingService.getAllLocations().stream()
+                .filter(location -> location.getTouristAttraction()
+                .contains(attraction) && location.isAvailability() == availability)
+                .collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/location/{attraction}/availability/{availability}/{minPrice}/{maxPrice}")
+    public List<Location>getAllLocationsForAnTouristAttractionAndAvailabilityAndForAnCertainPrice(
+            @PathVariable String attraction,
+            @PathVariable boolean availability,
+            @PathVariable int minPrice,
+            @PathVariable int maxPrice){
+        return bookingService.getAllLocations().stream()
+                .filter(location -> location.getTouristAttraction()
+                        .contains(attraction) && location.isAvailability() == availability&&
+                        location.getPrice() >= minPrice && location.getPrice() <= maxPrice)
+                .collect(Collectors.toList());
+    }
+
+
 }
