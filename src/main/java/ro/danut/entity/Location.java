@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -30,10 +32,11 @@ public class Location {
     private String touristAttraction;
 
     @Column(nullable = false)
-    private boolean availability;
-
-    @Column(nullable = false)
     private  String facilities;
+
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
 
 }
