@@ -25,4 +25,5 @@ public class Booking {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Location location;
+
 }
