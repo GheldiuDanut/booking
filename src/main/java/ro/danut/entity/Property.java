@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class Location {
+public class Property {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Location {
     private String description;
 
     @Column(nullable = false)
-    private  int price;
+    private  int pricePerNight;
 
     @Column(nullable = false)
     private String address;
@@ -35,6 +35,6 @@ public class Location {
     private  String facilities;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-    private List<Booking> bookings;
+    private List<Reservation> reservations;
 
 }

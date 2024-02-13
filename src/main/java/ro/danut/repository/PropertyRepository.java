@@ -1,9 +1,9 @@
 package ro.danut.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ro.danut.entity.Location;
+import ro.danut.entity.Property;
 
-public interface LocationRepository extends JpaRepository<Location, Integer> {
+public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
 
     void deleteByName(String name);

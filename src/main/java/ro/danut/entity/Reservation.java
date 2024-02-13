@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @NoArgsConstructor
-public class Booking {
+public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,6 @@ public class Booking {
     private double totalPrice;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private Location location;
+    private Property property;
 
 }

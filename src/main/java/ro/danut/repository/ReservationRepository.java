@@ -1,8 +1,8 @@
 package ro.danut.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ro.danut.entity.Booking;
+import ro.danut.entity.Reservation;
 
-public interface BookingRepository extends JpaRepository<Booking,Integer> {
+public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 //    void deleteByName(String name);
 }
