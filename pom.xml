@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ro.danut</groupId>
-	<artifactId>bookingProject</artifactId>
+	<artifactId>Booking</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bookingProject</name>
 	<description> project for Spring Boot</description>

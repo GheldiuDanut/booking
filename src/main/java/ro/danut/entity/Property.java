@@ -25,7 +25,7 @@ public class Property {
     @Column(nullable = false)
     private  int pricePerNight;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String address;
 
     @Column(nullable = false)
@@ -34,7 +34,7 @@ public class Property {
     @Column(nullable = false)
     private  String facilities;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
 }

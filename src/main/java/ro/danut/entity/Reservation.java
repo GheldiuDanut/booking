@@ -23,7 +23,7 @@ public class Reservation {
     @Column(nullable = false)
     private double totalPrice;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Property property;
 
 }

@@ -10,14 +10,16 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bookings")
+@RequestMapping("/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public void createBooking(@RequestBody Reservation reservation) {
+    public void createReservation(@RequestBody Reservation reservation) {
         reservationService.save(reservation);
     }
+
+    //I must check if it works
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateBooking(
             @PathVariable("id") Integer existingId,
@@ -32,21 +34,22 @@ public class ReservationController {
     public void deleteById(@PathVariable Integer id) {
         reservationService.deleteById(id);
     }
+//    @DeleteMapping("/{propertyId}/{reservationId}")
+//    public void deleteByReservationId(@PathVariable Integer propertyId, @PathVariable Integer reservationId) {
+//        reservationService.deleteByReservationId(propertyId, reservationId);
+//    }
 
-
-
-    @GetMapping("/all-booking")
+    @GetMapping("/all-reservations")
     public List<Reservation> getAllBookings() {
         return reservationService.getAllLocations();
     }
 
-//    @GetMapping("/all-booking/{location}")
-//    public List<Location> getAllBookingsForAnLocation(@PathVariable String attraction) {
-//        return bookingService.getAllLocations().stream().
-//                filter(location -> location.getTouristAttraction()
-//                        .contains(attraction)).toList();
-////        return bookingService.getAllLocationsByTouristAttraction();
-//    }
+    @GetMapping("/all-reservations/{location}")
+    public List<Reservation> getAllReservationForAnProperty(@PathVariable String property) {
+        return reservationService.getAllLocations().stream().
+                filter(location -> location.getProperty().equals(location)).toList();
+
+    }
 //
 ////    @Column(nullable = false)
 ////    private LocalDate checkInDate;
