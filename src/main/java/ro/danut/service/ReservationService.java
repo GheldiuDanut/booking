@@ -17,7 +17,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
 
-
     public void save(Reservation reservation) {
         Optional<Property>optionalProperty = propertyRepository.findById(reservation.getProperty().getId());
         if (optionalProperty.isPresent()) {
