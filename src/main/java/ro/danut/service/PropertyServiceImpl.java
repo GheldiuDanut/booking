@@ -22,6 +22,7 @@ public class PropertyServiceImpl implements PropertyService{
             throw new RuntimeException("Failed to save property: " + e.getMessage());
         }
     }
+    //Get all properties, else throw an error.
     public List<Property> getAllProperties() {
         try {
             return propertyRepository.findAll();
@@ -29,6 +30,7 @@ public class PropertyServiceImpl implements PropertyService{
             throw new RuntimeException("Failed to get list of properties: " + e.getMessage());
         }
     }
+    //Update a part of property if is find, else throw error.
     public void updatePatch(Integer existingId, Map<String, Object> locationMap) {
         var locationOptional = propertyRepository.findById(existingId);
         if (locationOptional.isEmpty()) {
@@ -61,6 +63,7 @@ public class PropertyServiceImpl implements PropertyService{
         }
         propertyRepository.save(property);
     }
+    //Update property if is find, else throw an error.
     public void updatePut(Integer existingId, Property newProperty) {
         var propertyOptional = propertyRepository.findById(existingId);
         if (propertyOptional.isEmpty()) {

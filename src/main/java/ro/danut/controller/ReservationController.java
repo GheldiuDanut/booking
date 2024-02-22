@@ -3,7 +3,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.danut.entity.Reservation;
-import ro.danut.service.ReservationService;
+import ro.danut.service.ReservationServiceImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -12,11 +12,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/reservations")
 public class ReservationController {
-    private final ReservationService reservationService;
+    private final ReservationServiceImpl reservationServiceImpl;
 
     @PostMapping
     public void createReservation(@RequestBody Reservation reservation) {
-        reservationService.save(reservation);
+        reservationServiceImpl.save(reservation);
     }
 
     //I must check if it works
@@ -24,7 +24,7 @@ public class ReservationController {
     public ResponseEntity<Void> updateBooking(
             @PathVariable("id") Integer existingId,
             @RequestBody Map<String, Object> updates) {
-        reservationService.updatePatch(existingId, updates);
+        reservationServiceImpl.updatePatch(existingId, updates);
         return ResponseEntity.ok().build();
     }
 
@@ -32,7 +32,7 @@ public class ReservationController {
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
-        reservationService.deleteById(id);
+        reservationServiceImpl.deleteById(id);
     }
 //    @DeleteMapping("/{propertyId}/{reservationId}")
 //    public void deleteByReservationId(@PathVariable Integer propertyId, @PathVariable Integer reservationId) {
@@ -41,12 +41,12 @@ public class ReservationController {
 
     @GetMapping("/all-reservations")
     public List<Reservation> getAllBookings() {
-        return reservationService.getAllLocations();
+        return reservationServiceImpl.getAllLocations();
     }
 
     @GetMapping("/all-reservations/{location}")
     public List<Reservation> getAllReservationForAnProperty(@PathVariable String property) {
-        return reservationService.getAllLocations().stream().
+        return reservationServiceImpl.getAllLocations().stream().
                 filter(location -> location.getProperty().equals(location)).toList();
 
     }
