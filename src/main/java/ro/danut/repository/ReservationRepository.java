@@ -8,14 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import ro.danut.entity.Reservation;
 
+import java.time.LocalDate;
+
 public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 
-
-
-//    @Modifying
-//    @Transactional
-//    @Query("DELETE FROM Reservation r WHERE r.property.id = :propertyId AND r.id = :id ")
-//    void deleteByReservationId(@Param("propertyId") Integer propertyId,@Param("id") Integer id);
+    @Query("SELECT COUNT(r) > 0 FROM Reservation r WHERE r.property.id = :propertyId " +
+            "AND ((r.checkInDate <= :checkIn AND r.checkOutDate >= :checkIn) OR (r.checkInDate <= :checkOut AND r.checkOutDate >= :checkOut))")
+    boolean existsReservationInInterval(@Param("propertyId") Integer propertyId,
+                                        @Param("checkIn") LocalDate checkIn,
+                                        @Param("checkOut") LocalDate checkOut);
 
 
 

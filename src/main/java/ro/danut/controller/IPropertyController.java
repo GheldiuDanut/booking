@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.Column;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,12 +14,14 @@ import ro.danut.entity.Property;
 
 public interface IPropertyController {
     String EXAMPLE = "{\n" +
-            "  \"Name\": \"\",\n" +
-            "  \"Description\": \"\",\n" +
-            "  \"PricePerNight\": \"\",\n" +
-            "  \"TouristAttraction\": \"\",\n" +
-            "  \"Facilities\": \"\"\n" +
+            "  \"name\": \"\",\n" +
+            "  \"description\": \"\",\n" +
+            "  \"pricePerNight\":  0,\n" +
+            "  \"address\": \"\",\n" +
+            "  \"touristAttraction\": \"\",\n" +
+            "  \"facilities\": \"\"\n" +
             "}";
+
     @ApiResponses(value = {@ApiResponse(responseCode = "200",
             description = "Successfully saved"),
             @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input")})
@@ -31,23 +32,23 @@ public interface IPropertyController {
                     content = @Content(examples = {
                             @ExampleObject(name = "Create", value = EXAMPLE)}
                     )) @RequestBody Property property) {
-
     }
-    @Operation(summary = "Update property with put.")
+
     @ApiResponses(value = {@ApiResponse(responseCode = "200",
             description = "Successfully updated"),
             @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input")})
 
-    @PutMapping("/{id}")
+
     default void updatePropertyWithPut(
             @Parameter(description = "Property to be updated ")
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(examples = {
-                            @ExampleObject(name = "Put", value = EXAMPLE)}
+                            @ExampleObject(name = "Put", value = NEWPROPRIETY)}
                     )) @RequestBody Property property) {
     }
 
-    String PROPRIETY = "{\n" +
+    String NEWPROPRIETY = "{\n" +
+            "  \"Name\": \"\",\n" +
             "  \"Name\": \"\",\n" +
             "  \"Description\": \"\",\n" +
             "  \"PricePerNight\": \"\",\n" +
@@ -55,8 +56,8 @@ public interface IPropertyController {
             "  \"TouristAttraction\": \"\",\n" +
             "  \"Facilities\": \"\"\n" +
             "}";
-    @Operation(summary = "Update property with patch.")
-    @PatchMapping("/{id}")
+
+
     @ApiResponses(value = {@ApiResponse(responseCode = "200",
             description = "Successfully updated"),
             @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input")})
@@ -64,10 +65,9 @@ public interface IPropertyController {
             @Parameter(description = "Property to be updated ")
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(examples = {
-                            @ExampleObject(name = "Patch", value = PROPRIETY)}
+                            @ExampleObject(name = "Patch", value = NEWPROPRIETY)}
                     )) @RequestBody Property property) {
     }
-
 
 
 }
