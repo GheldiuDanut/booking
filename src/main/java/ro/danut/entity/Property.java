@@ -4,10 +4,7 @@ package ro.danut.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -25,7 +22,7 @@ public class Property {
     private String description;
 
     @Column(nullable = false)
-    private  int pricePerNight;
+    private int pricePerNight;
 
     @Column(nullable = false, unique = true)
     private String address;
@@ -34,7 +31,7 @@ public class Property {
     private String touristAttraction;
 
     @Column(nullable = false)
-    private  String facilities;
+    private String facilities;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private List<Reservation> reservations;

@@ -17,13 +17,6 @@ public interface PropertyService {
             String attraction,
             int minPrice,
             int maxPrice);
-    List<Property> getAllPropertiesAvailableForATouristAttractionAndForACertainPrice(
-            String attraction,
-            LocalDate checkInDate,
-            LocalDate checkOutDate,
-            int minPrice,
-            int maxPrice);
-
 
     Optional<Property> getAPropertyByName(String name);
 

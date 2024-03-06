@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,6 @@ public class PropertyServiceImpl implements PropertyService {
         }
     }
 
-
     //Get all properties, else throw an error.
     public List<Property> getAllProperties() {
         try {
@@ -42,10 +40,12 @@ public class PropertyServiceImpl implements PropertyService {
         }
     }
 
+    //Get a property by id.
     public Optional<Property> getAPropertyById(Integer id) {
         return propertyRepository.findById(id);
     }
 
+    //Get a property by name.
     public Optional<Property> getAPropertyByName(String name) {
         return propertyRepository.findByName(name);
     }
@@ -53,14 +53,11 @@ public class PropertyServiceImpl implements PropertyService {
     //Get all properties for a tourist attraction.
     public List<Property> getAllPropertiesForATouristAttraction(String attraction) {
         return propertyRepository.findByTouristAttraction(attraction);
-
     }
 
     //Get all properties for a certain price.
     public List<Property> getAllPropertiesForACertainPrice(int minPrice, int maxPrice) {
-        return getAllProperties().stream()
-                .filter(property -> property.getPricePerNight() >= minPrice && property.getPricePerNight() <= maxPrice)
-                .collect(Collectors.toList());
+        return propertyRepository.findByPricePerNightBetween(minPrice, maxPrice);
     }
 
     //Get all properties for a tourist attraction and for a certain price.
@@ -68,84 +65,92 @@ public class PropertyServiceImpl implements PropertyService {
             String attraction,
             int minPrice,
             int maxPrice) {
-        return getAllProperties().stream()
-                .filter(property -> property.getTouristAttraction()
-                        .contains(attraction) &&
-                        property.getPricePerNight() >= minPrice && property.getPricePerNight() <= maxPrice)
-                .toList();
+        return propertyRepository.findByPricePerNightBetweenAndTouristAttraction(minPrice, maxPrice, attraction);
     }
 
-    //trebuie sa ii fac un query in propertyrepo
-    //Get all properties available in a period of time for a tourist attraction and for a certain price.
+
+
+//    Get all properties available in a period of time for a tourist attraction and for a certain price.
+
     public List<Property> getAllPropertiesAvailableForATouristAttractionAndForACertainPrice(
-            String attraction,
+//            LocalDate checkIn,
+//            LocalDate checkOut,
             LocalDate checkInDate,
             LocalDate checkOutDate,
             int minPrice,
-            int maxPrice) {
-        return getAllProperties().stream()
-                .filter(property -> property.getTouristAttraction()
-                        .contains(attraction) && isAvailableInIntervalOfTime(checkInDate, checkOutDate,property) &&
-                        property.getPricePerNight() >= minPrice && property.getPricePerNight() <= maxPrice)
-                .collect(Collectors.toList());
+            int maxPrice,
+            String attraction) {
+        return propertyRepository.findByCheckInBetweenAndCheckOutBetweenAndPriceBetweenAndTouristAttraction(checkInDate, checkOutDate,  minPrice, maxPrice, attraction);
     }
-    private  static boolean isAvailableInIntervalOfTime(LocalDate checkIn, LocalDate checkOut,Property property){
-        long count = property.getReservations().stream()
-                .filter(r -> checkIn.isBefore(r.getCheckInDate()) && !checkOut.isAfter(r.getCheckInDate())
-                        || !checkIn.isBefore(r.getCheckOutDate()) && checkOut.isAfter(r.getCheckOutDate())
-                )
-                .count();
-        return count == 0;
 
-    }
+
+
+
+
+//        getAllPropertiesAvailableForATouristAttractionAndForACertainPrice(attraction, checkInDate, checkOutDate, minPrice, maxPrice).stream()
+//                .filter(property -> property.getTouristAttraction()
+//                        .contains(attraction) && isAvailableInIntervalOfTime(checkInDate, checkOutDate,property) &&
+//                        property.getPricePerNight() >= minPrice && property.getPricePerNight() <= maxPrice)
+//                .collect(Collectors.toList());
+//    }
+//    private static boolean isAvailableInIntervalOfTime(LocalDate checkIn, LocalDate checkOut, Property property) {
+//        if (checkOut.isBefore(checkIn)) {
+//            throw new RuntimeException("CheckIn must be before CheckOut");
+//        }
+//        long count = property.getReservations().stream()
+//                .filter(r -> checkOut.isAfter(r.getCheckInDate()) && checkIn.isBefore(r.getCheckOutDate()))
+//                .peek(System.out::println)
+//                .count();
+//        return count == 0;
+//    }
 
     //Update a part of property if is find, else throw error.
-    public void updatePatch(Integer existingId, Map<String, Object> locationMap) {
+    public void updatePatch(Integer existingId, Map<String, Object> property) {
         var propertyOptional = propertyRepository.findById(existingId);
         if (propertyOptional.isEmpty()) {
             throw new RuntimeException("Property NOT Found");
         }
-        Property property = propertyOptional.get();
-        for (Map.Entry<String, Object> entry : locationMap.entrySet()) {
+        Property newProperty = propertyOptional.get();
+        for (Map.Entry<String, Object> entry : property.entrySet()) {
             switch (entry.getKey()) {
-                case "Name":
-                    property.setName((String) entry.getValue());
+                case "Name","name":
+                    newProperty.setName((String) entry.getValue());
                     break;
-                case "Address":
-                    property.setAddress((String) entry.getValue());
+                case "Address","address":
+                    newProperty.setAddress((String) entry.getValue());
                     break;
-                case "Description":
-                    property.setDescription((String) entry.getValue());
+                case "Description","description":
+                    newProperty.setDescription((String) entry.getValue());
                     break;
-                case "Price":
-                    property.setPricePerNight((Integer) entry.getValue());
+                case "Price","price":
+                    newProperty.setPricePerNight((Integer) entry.getValue());
                     break;
-                case "Facilities":
-                    property.setFacilities((String) entry.getValue());
+                case "Facilities","facilities":
+                    newProperty.setFacilities((String) entry.getValue());
                     break;
-                case "TouristAttraction":
-                    property.setTouristAttraction((String) entry.getValue());
+                case "TouristAttraction","touristAttraction":
+                    newProperty.setTouristAttraction((String) entry.getValue());
                     break;
                 default:
                     throw new RuntimeException("Field  not recognized");
             }
         }
-        propertyRepository.save(property);
+        propertyRepository.save(newProperty);
     }
 
     //Update property if is find, else throw an error.
-    public void updatePut(Integer existingId, Property newProperty) {
+    public void updatePut(Integer existingId, Property property) {
         var propertyOptional = propertyRepository.findById(existingId);
         if (propertyOptional.isEmpty()) {
             throw new RuntimeException("Property NOT Found");
         }
         Property existingProperty = propertyOptional.get();
-        existingProperty.setName(newProperty.getName());
-        existingProperty.setAddress(newProperty.getAddress());
-        existingProperty.setDescription(newProperty.getDescription());
-        existingProperty.setPricePerNight(newProperty.getPricePerNight());
-        existingProperty.setFacilities(newProperty.getFacilities());
-        existingProperty.setTouristAttraction(newProperty.getTouristAttraction());
+        existingProperty.setName(property.getName());
+        existingProperty.setAddress(property.getAddress());
+        existingProperty.setDescription(property.getDescription());
+        existingProperty.setPricePerNight(property.getPricePerNight());
+        existingProperty.setFacilities(property.getFacilities());
+        existingProperty.setTouristAttraction(property.getTouristAttraction());
         propertyRepository.save(existingProperty);
     }
 
