@@ -3,6 +3,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ro.danut.dto.ReservationDto;
 import ro.danut.entity.Property;
 import ro.danut.entity.Reservation;
 import ro.danut.service.PropertyServiceImpl;
@@ -10,11 +11,10 @@ import ro.danut.service.ReservationServiceImpl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 
-@RequestMapping("/reservations")
+@RequestMapping("/reservation")
 public class ReservationController implements IReservationController{
     private final PropertyServiceImpl propertyServiceImpl;
     private final ReservationServiceImpl reservationServiceImpl;
@@ -28,53 +28,43 @@ public class ReservationController implements IReservationController{
 
     @PostMapping("/save-reservation/{propertyId}")
     @Operation(summary = "Save a new reservation.")
-    public void createReservation(@RequestBody Reservation reservation,@PathVariable Integer propertyId) {
-       reservationServiceImpl.save(propertyId,reservation);
+    public void createReservation(@RequestBody ReservationDto reservationDto, @PathVariable Integer propertyId) {
+       reservationServiceImpl.save(propertyId, reservationDto);
     }
 
     @Operation(summary = "Get all reservation.")
     @GetMapping("/all-reservations")
-    public List<Reservation> getAllReservations() {
+    public List<ReservationDto> getAllReservations() {
         return reservationServiceImpl.getAllReservations();
     }
-    // Get all reservation for a property
-
 
 
     @Operation(summary = "Get all reservation for a property.")
     @GetMapping("/all-reservations/{propertyName}")
-    public List<Reservation> getAllReservationForAProperty(@PathVariable String propertyName) {
+    public List<ReservationDto> getAllReservationForAProperty(@PathVariable String propertyName) {
         return reservationServiceImpl.getAllReservationForAProperty(propertyName);
 
     }
-//    @Operation(summary = "Get all reservation for a property.")
-//    @GetMapping("/all-reservations/{property}")
-//    public List<Reservation> getAllPropertiesAvailableForReservationForATouristAttractionAndForACertainPrice(
-//            @PathVariable String attraction,
-//            @PathVariable LocalDate checkInDate,
-//            @PathVariable LocalDate checkOutDate,
-//            @PathVariable int minPrice,
-//            @PathVariable int maxPrice
-//    ) {
-//        return reservationServiceImpl.getAllPropertiesAvailableForReservationForATouristAttractionAndForACertainPrice(attraction,checkInDate,checkOutDate,minPrice,maxPrice);
-//
-//    }
 
 
-    //I must check if it works.
-    public ResponseEntity<Void> updateReservationWithPatch(
-            @PathVariable("id") Integer propertyId,
-            @RequestBody Map<String, Object> updatedReservation) {
+    @PatchMapping("/update-reservation-patch/{id}")
+    @Operation(summary = "Update reservation with patch.")
+    public void updateReservationWithPatch(
+            @RequestBody Map<String, Object> updatedReservation,
+            @PathVariable("id") Integer propertyId)
+           {
         reservationServiceImpl.updatePatch(propertyId, updatedReservation);
-        return ResponseEntity.ok().build();
     }
-    public ResponseEntity<Void> updateReservationWithPut(
-            @PathVariable("id") Integer propertyId,
-            @RequestBody Reservation updatedReservation) {
-        reservationServiceImpl.updatePut(propertyId, updatedReservation);
-        return ResponseEntity.ok().build();
+    @Operation(summary = "Update reservation with put.")
+    @PutMapping("/update-reservation-put/{propertyId}/{reservationId}")
+    public void updateReservationWithPut(
+            @RequestBody Reservation updatedReservation,
+            @PathVariable("propertyId")Integer propertyId,
+            @PathVariable("reservationId") Integer reservationId) {
+        reservationServiceImpl.updatePut(propertyId,reservationId, updatedReservation);
     }
-    //Delete a reservation by id.
+
+
     @Operation(summary = "Delete a reservation by id.")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {

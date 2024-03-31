@@ -23,6 +23,8 @@ public class Reservation {
     @Column(nullable = false)
     private double totalPrice;
 
+
+//    @ManyToOne(targetEntity = Property.class,fetch = FetchType.LAZY)
     @ManyToOne
     private Property property;
 

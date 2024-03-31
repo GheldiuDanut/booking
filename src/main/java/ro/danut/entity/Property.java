@@ -33,16 +33,8 @@ public class Property {
     @Column(nullable = false)
     private String facilities;
 
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
+//    @OneToMany( mappedBy = "property", cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "property",cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
-//    public boolean isAvailableInIntervalOfTime(LocalDate checkIn, LocalDate checkOut){
-//        for ( Reservation reservation: reservations) {
-//            if (reservation.getCheckInDate().isBefore(checkIn) && reservation.getCheckOutDate().isAfter(checkOut)||
-//            reservation.getCheckInDate().isBefore(checkOut)&&reservation.getCheckOutDate().isAfter(checkOut)){
-//                return  true;
-//            }
-//        }
-//        return false;
-//    }
 }

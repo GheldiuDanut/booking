@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import ro.danut.dto.PropertyDto;
 import ro.danut.entity.Property;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public interface IPropertyController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(examples = {
                             @ExampleObject(name = "Create", value = EXAMPLE)}
-                    )) @RequestBody Property property) {
+                    )) @RequestBody PropertyDto propertyDto) {
     }
 
     @ApiResponses(value = {@ApiResponse(responseCode = "200",
@@ -40,7 +41,7 @@ public interface IPropertyController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(examples = {
                             @ExampleObject(name = "Patch", value = EXAMPLE)}
-                    )) @RequestBody Map<String, Object> property, @PathVariable("id") Integer existingId) {
+                    )) @RequestBody Map<String, Object> propertyDto, @PathVariable("id") Integer existingId) {
     }
 
     @ApiResponses(value = {@ApiResponse(responseCode = "200",
@@ -51,6 +52,6 @@ public interface IPropertyController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(examples = {
                             @ExampleObject(name = "Put", value = EXAMPLE)}
-                    )) @RequestBody Property property, @PathVariable("id") Integer existingId) {
+                    )) @RequestBody PropertyDto propertyDto, @PathVariable("id") Integer existingId) {
     }
 }

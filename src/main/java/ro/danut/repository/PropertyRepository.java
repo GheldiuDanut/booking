@@ -20,9 +20,18 @@ public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
     List<Property> findByPricePerNightBetween(Integer minPrice, Integer maxPrice);
 
+//    @Query("SELECT p FROM Property p LEFT JOIN p.reservations r " +
+//            "WHERE p.touristAttraction = :touristAttraction " +
+//            "AND p.pricePerNight >= :minPrice AND p.pricePerNight <= :maxPrice "+
+//            "AND (r.checkInDate > :checkOut OR :checkIn > r.checkOutDate)" )
 
-    @Query("SELECT p FROM Property p JOIN p.reservations r WHERE r.checkInDate < :checkOut AND r.checkOutDate > :checkIn AND (:minPrice IS NULL OR p.pricePerNight >= :minPrice) AND (:maxPrice IS NULL OR p.pricePerNight <= :maxPrice) AND (:touristAttraction IS NULL OR p.touristAttraction = :touristAttraction)")
-    List<Property> findByCheckInBetweenAndCheckOutBetweenAndPriceBetweenAndTouristAttraction(
+
+        @Query("SELECT p FROM Property p  " +
+            "WHERE p.touristAttraction = :touristAttraction " +
+            "AND p.pricePerNight >= :minPrice AND p.pricePerNight <= :maxPrice "+
+            "AND p.id NOT IN (SELECT r.property.id FROM Reservation r WHERE (:checkIn > r.checkInDate AND :checkIn < r.checkOutDate) " +
+                "OR (:checkOut > r.checkInDate AND :checkOut < r.checkOutDate) OR (:checkIn < r.checkInDate AND :checkOut > r.checkOutDate))" )
+    List<Property> findAllAvailableProprieties(
             @Param("checkIn") LocalDate checkIn,
             @Param("checkOut") LocalDate checkOut,
             @Param("minPrice") Integer minPrice,
@@ -30,8 +39,6 @@ public interface PropertyRepository extends JpaRepository<Property, Integer> {
             @Param("touristAttraction") String touristAttraction
     );
 
-
-//    List<Property>findByCheckInBetweenAndCheckOutBetweenAndPriceBetweenAndTouristAttraction(LocalDate checkIn, LocalDate checkOut,LocalDate checkInDate,LocalDate checkOutDate,Integer minPrice, Integer maxPrice, String touristAttraction);
 
 
 }
