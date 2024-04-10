@@ -1,4 +1,5 @@
 package ro.danut.dto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import ro.danut.entity.Property;
 
@@ -14,5 +15,6 @@ public class ReservationDto {
 
     private double totalPrice;
 
+    @JsonIgnore
     private Property property;
 }

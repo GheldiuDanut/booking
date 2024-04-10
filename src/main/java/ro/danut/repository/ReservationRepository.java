@@ -20,7 +20,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
                                         @Param("checkIn") LocalDate checkIn,
                                         @Param("checkOut") LocalDate checkOut);
 
-    List<ReservationDto> findByPropertyName(String propertyName);
+
 
     @Query("SELECT COUNT(r) > 0 FROM Reservation r WHERE r.property.id = :propertyId AND ((r.checkInDate BETWEEN :checkInDate AND :checkOutDate) OR (r.checkOutDate BETWEEN :checkInDate AND :checkOutDate)) AND r.id <> :reservationId")
     boolean overlappingReservation(@Param("propertyId") Integer propertyId,

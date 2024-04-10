@@ -3,6 +3,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ro.danut.dto.PropertyDto;
 import ro.danut.dto.ReservationDto;
 import ro.danut.entity.Property;
 import ro.danut.entity.Reservation;
@@ -11,6 +12,7 @@ import ro.danut.service.ReservationServiceImpl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 
@@ -39,11 +41,10 @@ public class ReservationController implements IReservationController{
     }
 
 
-    @Operation(summary = "Get all reservation for a property.")
-    @GetMapping("/all-reservations/{propertyName}")
-    public List<ReservationDto> getAllReservationForAProperty(@PathVariable String propertyName) {
-        return reservationServiceImpl.getAllReservationForAProperty(propertyName);
-
+    @Operation(summary = "Get a property by Id.")
+    @GetMapping("/get-by-id/{id}")
+    public Optional<ReservationDto> getById(@PathVariable Integer id) {
+        return reservationServiceImpl.getAReservationById(id);
     }
 
 

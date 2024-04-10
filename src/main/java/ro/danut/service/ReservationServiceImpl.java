@@ -3,6 +3,7 @@ package ro.danut.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ro.danut.dto.PropertyDto;
 import ro.danut.dto.ReservationDto;
 import ro.danut.entity.Property;
 import ro.danut.entity.Reservation;
@@ -10,6 +11,7 @@ import ro.danut.exception.FieldNotFoundException;
 import ro.danut.exception.PeriodIsNotAvailableException;
 import ro.danut.exception.PropertyNotFoundException;
 import ro.danut.exception.ReservationNotFoundException;
+import ro.danut.mapper.PropertyMapper;
 import ro.danut.mapper.ReservationMapper;
 import ro.danut.repository.PropertyRepository;
 import ro.danut.repository.ReservationRepository;
@@ -64,9 +66,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-    //Get all reservations for a property.
-    public List<ReservationDto> getAllReservationForAProperty(String propertyName) {
-        return reservationRepository.findByPropertyName(propertyName);
+
+    //Get a property by id.
+    public Optional<ReservationDto> getAReservationById(Integer id) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        return reservationOptional.map(ReservationMapper.INSTANCE::ReservationEntityToReservationDto);
     }
 
     public void updatePatch(Integer existingId, Map<String, Object> updates) {
