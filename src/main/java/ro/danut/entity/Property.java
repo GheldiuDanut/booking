@@ -33,7 +33,6 @@ public class Property {
     @Column(nullable = false)
     private String facilities;
 
-//    @OneToMany( mappedBy = "property", cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @OneToMany(mappedBy = "property",cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
